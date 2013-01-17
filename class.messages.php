@@ -1,18 +1,32 @@
 <?php
 //--------------------------------------------------------------------------------------------------
 // Session-Based Flash Messages v1.0
-// (c) 2011 Mike Everhart | MikeEverhart.net
-//--------------------------------------------------------------------------------------------------
+// Copyright 2012 Mike Everhart (http://mikeeverhart.net)
 //
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//	 limitations under the License.
+//	 
+//------------------------------------------------------------------------------
 // Description:
+//------------------------------------------------------------------------------
+//
 //	Stores messages in Session data to be easily retrieved later on.
-// This class includes four different types of messages:
+// 	This class includes four different types of messages:
 //  - Success
 //  - Error
 //  - Warning
 //  - Information
 // 
-//See README for basic usage instructions, or see samples/index.php for more advanced samples
+//  See README for basic usage instructions, or see samples/index.php for more advanced samples
 //
 //--------------------------------------------------------------------------------------------------
 // Changelog
@@ -35,9 +49,10 @@ class Messages {
 	var $msgAfter = "</p>\n";
 
 	
-	//-----------------------------------------------------------------------------------------------
-	// __construct()
-	//-----------------------------------------------------------------------------------------------
+	/**
+	 * Constructor
+	 * @author Mike Everhart
+	 */
 	public function __construct() {
 	
 		// Generate a unique ID for this user and session
@@ -48,11 +63,18 @@ class Messages {
 		
 	}
 	
-	//-----------------------------------------------------------------------------------------------
-	// add()
-	// adds a new message to the session data
-	//-----------------------------------------------------------------------------------------------
-	public function add($type, $message) {
+	/**
+	 * Add a message to the queue
+	 * 
+	 * @author Mike Everhart
+	 * 
+	 * @param  string   $type        	The type of message to add
+	 * @param  string   $message     	The message
+	 * @param  string   $redirect_to 	(optional) If set, the user will be redirected to this URL
+	 * @return  bool 
+	 * 
+	 */
+	public function add($type, $message, $redirect_to=null) {
 		
 		if( !isset($_SESSION['flash_messages']) ) return false;
 		
@@ -74,6 +96,11 @@ class Messages {
 		if( !array_key_exists( $type, $_SESSION['flash_messages'] ) ) $_SESSION['flash_messages'][$type] = array();
 		
 		$_SESSION['flash_messages'][$type][] = $message;
+
+		if( !is_null($redirect_to) ) {
+			header("Location: $redirect_to");
+			exit();
+		}
 		
 		return true;
 		
@@ -83,6 +110,16 @@ class Messages {
 	// display()
 	// print queued messages to the screen
 	//-----------------------------------------------------------------------------------------------
+	/**
+	 * Display the queued messages
+	 * 
+	 * @author Mike Everhart
+	 * 
+	 * @param  string   $type     Which messages to display
+	 * @param  bool  	$print    True  = print the messages on the screen
+	 * @return mixed              
+	 * 
+	 */
 	public function display($type='all', $print=true) {
 		$messages = '';
 		$data = '';
@@ -132,17 +169,28 @@ class Messages {
 	}
 	
 	
-	//-----------------------------------------------------------------------------------------------
-	// hasErrors()
-	// Checks to see if there are any queued error messages
-	//-----------------------------------------------------------------------------------------------
-	public function hasErrors() { return empty($_SESSION['flash_messages']['error']) ? false : true;	}
+	/**
+	 * Check to  see if there are any queued error messages
+	 * 
+	 * @author Mike Everhart
+	 * 
+	 * @return bool  true  = There ARE error messages
+	 *               false = There are NOT any error messages
+	 * 
+	 */
+	public function hasErrors() { 
+		return empty($_SESSION['flash_messages']['error']) ? false : true;	
+	}
 	
-	
-	//-----------------------------------------------------------------------------------------------
-	// hasMessages()
-	// Checks to see if there are queued messages of any kind
-	//-----------------------------------------------------------------------------------------------
+	/**
+	 * Check to see if there are any ($type) messages queued
+	 * 
+	 * @author Mike Everhart
+	 * 
+	 * @param  string   $type     The type of messages to check for
+	 * @return bool            	  
+	 * 
+	 */
 	public function hasMessages($type=null) {
 		if( !is_null($type) ) {
 			if( !empty($_SESSION['flash_messages'][$type]) ) return $_SESSION['flash_messages'][$type];	
@@ -154,17 +202,15 @@ class Messages {
 		return false;
 	}
 	
-	//-----------------------------------------------------------------------------------------------
-	// __toString
-	// "magic" method that will, in this case, return the result from $this->hasMessages()
-	//-----------------------------------------------------------------------------------------------
-	public function __toString() { return $this->hasMessages();	}
-	
-	
-	//-----------------------------------------------------------------------------------------------
-	// clear()
-	// deletes all the queued messages in the session data
-	//-----------------------------------------------------------------------------------------------
+	/**
+	 * Clear messages from the session data
+	 * 
+	 * @author Mike Everhart
+	 * 
+	 * @param  string   $type     The type of messages to clear
+	 * @return bool 
+	 * 
+	 */
 	public function clear($type='all') { 
 		if( $type == 'all' ) {
 			unset($_SESSION['flash_messages']); 
@@ -174,10 +220,8 @@ class Messages {
 		return true;
 	}
 	
-	//-----------------------------------------------------------------------------------------------
-	// __destruct()
-	// Purges all of the messages from the session data
-	//-----------------------------------------------------------------------------------------------
+	public function __toString() { return $this->hasMessages();	}
+
 	public function __destruct() {
 		//$this->clear();
 	}

@@ -1,7 +1,7 @@
 <?php
 namespace Plasticbrain\FlashMessages;
 
-class Messages {
+class FlashMessages {
 
     // Message types and shortcuts
     const INFO    = 'i';
@@ -219,7 +219,7 @@ class Messages {
             }
             $this->clear($type);            
         }
-        
+
         
         // Print everything to the screen (or return the data)
         if ($print) { 

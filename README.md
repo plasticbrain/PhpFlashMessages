@@ -33,10 +33,10 @@ if (!session_id()) @session_start();
 	
 // Include the file
 // Note: this is not required if using composer or other autoloading (recommended)
-require_once 'php-flash-messages/FlashMessages.php';
+require_once 'PhpFlashMessages/src/FlashMessages.php';
 
 // Instantiate the class
-$msg = new Plasticbrain\FlashMessages\Messages();
+$msg = new \Plasticbrain\FlashMessages\FlashMessages();
 
 
 // Add messages

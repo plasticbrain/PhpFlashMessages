@@ -1,0 +1,19 @@
+{
+    "name": "plasticbrain/php-flash-messages",
+    "description": "A modern take on PHP session-based flash messages",
+    "keywords": ["php", "flash", "messages", "session"],
+    "authors": [
+        {
+            "name": "Mike Everhart",
+            "email": "mike@plasticbrain.net"
+        }
+    ],
+    "license": "MIT",
+    "require": {},
+    "require-dev": {},
+    "autoload": {
+        "psr-4": {
+            "Plasticbrain\\php-flash-messages\\": "src"
+        }
+    }
+}

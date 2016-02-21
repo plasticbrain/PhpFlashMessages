@@ -67,7 +67,7 @@ if ($msg->hasErrors()) {
   // There are NOT any errors
 }
 	
-// Where ever you want to display the messages simply call:
+// Wherever you want to display the messages simply call:
 $msg->display();
 ````
 

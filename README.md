@@ -171,22 +171,22 @@ Check to see if there are any specific message types (or any messages at all) qu
 
 ````php
 // Check if there are any INFO messages
-if ($msg->hasMessage($msg::INFO)) {
+if ($msg->hasMessages($msg::INFO)) {
     ...
 }
 
 // Check if there are any SUCCESS messages
-if ($msg->hasMessage($msg::SUCCESS)) {
+if ($msg->hasMessages($msg::SUCCESS)) {
     ...
 }
 
 // Check if there are any WARNING messages
-if ($msg->hasMessage($msg::WARNING)) {
+if ($msg->hasMessages($msg::WARNING)) {
     ...
 }
 
 // Check if there are any ERROR messages
-if ($msg->hasMessage($msg::ERROR)) {
+if ($msg->hasMessages($msg::ERROR)) {
     ...
 }
 

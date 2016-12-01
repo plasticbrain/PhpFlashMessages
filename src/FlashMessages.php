@@ -22,12 +22,12 @@ class FlashMessages {
     // 
     // $msg->display([$msg::SUCCESS, $msg::INFO, $msg::ERROR, $msg::WARNING])
     // 
-    protected $msgTypes = [
+    protected $msgTypes = array(
         self::ERROR   => 'error',
         self::WARNING => 'warning', 
         self::SUCCESS => 'success', 
         self::INFO    => 'info', 
-    ];
+    );
     
     // Each message gets wrapped in this
     protected $msgWrapper = "<div class='%s'>%s</div>\n"; 
@@ -46,12 +46,12 @@ class FlashMessages {
     // CSS Classes
     protected $stickyCssClass = 'sticky';
     protected $msgCssClass = 'alert dismissable';
-    protected $cssClassMap = [ 
+    protected $cssClassMap = array( 
         self::INFO    => 'alert-info',
         self::SUCCESS => 'alert-success',
         self::WARNING => 'alert-warning',
         self::ERROR   => 'alert-danger',
-    ];
+    );
 
     // Where to redirect the user after a message is queued
     protected $redirectUrl = null;
@@ -73,7 +73,7 @@ class FlashMessages {
         $this->msgId = sha1(uniqid());
 
         // Create session array to hold our messages if it doesn't already exist
-        if (!array_key_exists('flash_messages', $_SESSION)) $_SESSION['flash_messages'] = [];
+        if (!array_key_exists('flash_messages', $_SESSION)) $_SESSION['flash_messages'] = array();
 
     }
 
@@ -167,7 +167,7 @@ class FlashMessages {
         
         // Add the message to the session data
         if (!array_key_exists( $type, $_SESSION['flash_messages'] )) $_SESSION['flash_messages'][$type] = array();
-        $_SESSION['flash_messages'][$type][] = ['sticky' => $sticky, 'message' => $message];
+        $_SESSION['flash_messages'][$type][] = array('sticky' => $sticky, 'message' => $message);
 
         // Handle the redirect if needed
         if (!is_null($redirectUrl)) $this->redirectUrl = $redirectUrl;
@@ -200,14 +200,14 @@ class FlashMessages {
         // Print multiple message types (as defined by an array)
         } elseif (is_array($types) && !empty($types)) {
             $theTypes = $types;
-            $types = [];
+            $types = array();
             foreach($theTypes as $type) {
                 $types[] = strtolower($type[0]);
             }
 
         // Print only a single message type
         } else {
-            $types = [strtolower($types[0])];
+            $types = array(strtolower($types[0]));
         }
 
 
@@ -315,12 +315,12 @@ class FlashMessages {
      * @return object 
      * 
      */
-    protected function clear($types=[]) 
+    protected function clear($types=array()) 
     { 
         if ((is_array($types) && empty($types)) || is_null($types) || !$types) {
             unset($_SESSION['flash_messages']);
         } elseif (!is_array($types)) {
-            $types = [$types];
+            $types = array($types);
         }
 
         foreach ($types as $type) {
@@ -430,7 +430,7 @@ class FlashMessages {
         if (!is_array($msgType) ) {
             // Make sure there's a CSS class set
             if (is_null($cssClass)) return $this;
-            $msgType = [$msgType => $cssClass];
+            $msgType = array($msgType => $cssClass);
         }
 
         foreach ($msgType as $type => $cssClass) {

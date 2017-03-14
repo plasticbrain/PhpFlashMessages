@@ -176,6 +176,31 @@ class FlashMessages
     }
 
     /**
+     * @param null $type
+     * @return array
+     */
+    public function getMessages($type = null)
+    {
+        if (!isset($_SESSION['flash_messages'])) {
+            return [];
+        }
+
+        if (isset($type) &&
+            (!isset($_SESSION['flash_messages'][$type]) || empty($_SESSION['flash_messages'][$type]))
+        ) {
+            return [];
+        }
+
+        if (isset($type) && !empty($type)) {
+            $msgData = $_SESSION['flash_messages'][$type];
+        } else {
+            return $_SESSION['flash_messages'];
+        }
+
+        return $msgData;
+    }
+
+    /**
      * Display the flash messages
      *
      * @param  mixed $types (null)  print all of the message types

@@ -1,7 +1,12 @@
 {
     "name": "plasticbrain/php-flash-messages",
     "description": "A modern take on PHP session-based flash messages",
-    "keywords": ["flash", "messages", "session", "bootstrap"],
+    "keywords": [
+        "flash",
+        "messages",
+        "session",
+        "bootstrap"
+    ],
     "authors": [
         {
             "name": "Mike Everhart",
@@ -10,7 +15,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=5.4.0" 
+        "php": ">=5.4.0"
     },
     "require-dev": {},
     "autoload": {

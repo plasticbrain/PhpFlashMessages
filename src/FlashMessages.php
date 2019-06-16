@@ -1,33 +1,34 @@
 <?php
+
 namespace Plasticbrain\FlashMessages;
 
 class FlashMessages
 {
 
     // Message types and shortcuts
-    const INFO    = 'i';
+    const INFO = 'i';
     const SUCCESS = 's';
     const WARNING = 'w';
-    const ERROR   = 'e';
+    const ERROR = 'e';
 
     // Default message type
     const defaultType = self::INFO;
 
     // Message types and order
-    // 
-    // Note:  The order that message types are listed here is the same order 
+    //
+    // Note:  The order that message types are listed here is the same order
     // they will be printed on the screen (ie: when displaying all messages)
-    // 
+    //
     // This can be overridden with the display() method by manually defining
     // the message types in the order you want to display them. For example:
-    // 
+    //
     // $msg->display([$msg::SUCCESS, $msg::INFO, $msg::ERROR, $msg::WARNING])
-    // 
+    //
     protected $msgTypes = [
-        self::ERROR   => 'error',
+        self::ERROR => 'error',
         self::WARNING => 'warning',
         self::SUCCESS => 'success',
-        self::INFO    => 'info',
+        self::INFO => 'info',
     ];
 
     // Each message gets wrapped in this
@@ -35,7 +36,7 @@ class FlashMessages
 
     // Prepend and append to each message (inside of the wrapper)
     protected $msgBefore = '';
-    protected $msgAfter  = '';
+    protected $msgAfter = '';
 
     // HTML for the close button
     protected $closeBtn = '<button type="button" class="close" 
@@ -46,12 +47,12 @@ class FlashMessages
 
     // CSS Classes
     protected $stickyCssClass = 'sticky';
-    protected $msgCssClass    = 'alert dismissable';
-    protected $cssClassMap    = [
-        self::INFO    => 'alert-info',
+    protected $msgCssClass = 'alert dismissable';
+    protected $cssClassMap = [
+        self::INFO => 'alert-info',
         self::SUCCESS => 'alert-success',
         self::WARNING => 'alert-warning',
-        self::ERROR   => 'alert-danger',
+        self::ERROR => 'alert-danger',
     ];
 
     // Where to redirect the user after a message is queued
@@ -79,9 +80,9 @@ class FlashMessages
     /**
      * Add an info message
      *
-     * @param  string $message The message text
-     * @param  string $redirectUrl Where to redirect once the message is added
-     * @param  boolean $sticky Sticky the message (hides the close button)
+     * @param string $message The message text
+     * @param string $redirectUrl Where to redirect once the message is added
+     * @param boolean $sticky Sticky the message (hides the close button)
      * @return object
      *
      */
@@ -93,9 +94,9 @@ class FlashMessages
     /**
      * Add a success message
      *
-     * @param  string $message The message text
-     * @param  string $redirectUrl Where to redirect once the message is added
-     * @param  boolean $sticky Sticky the message (hides the close button)
+     * @param string $message The message text
+     * @param string $redirectUrl Where to redirect once the message is added
+     * @param boolean $sticky Sticky the message (hides the close button)
      * @return object
      *
      */
@@ -107,9 +108,9 @@ class FlashMessages
     /**
      * Add a warning message
      *
-     * @param  string $message The message text
-     * @param  string $redirectUrl Where to redirect once the message is added
-     * @param  boolean $sticky Sticky the message (hides the close button)
+     * @param string $message The message text
+     * @param string $redirectUrl Where to redirect once the message is added
+     * @param boolean $sticky Sticky the message (hides the close button)
      * @return object
      *
      */
@@ -121,9 +122,9 @@ class FlashMessages
     /**
      * Add an error message
      *
-     * @param  string $message The message text
-     * @param  string $redirectUrl Where to redirect once the message is added
-     * @param  boolean $sticky Sticky the message (hides the close button)
+     * @param string $message The message text
+     * @param string $redirectUrl Where to redirect once the message is added
+     * @param boolean $sticky Sticky the message (hides the close button)
      * @return object
      *
      */
@@ -135,9 +136,9 @@ class FlashMessages
     /**
      * Add a sticky message
      *
-     * @param  string $message The message text
-     * @param  string $redirectUrl Where to redirect once the message is added
-     * @param  string $type The $msgType
+     * @param string $message The message text
+     * @param string $redirectUrl Where to redirect once the message is added
+     * @param string $type The $msgType
      * @return object
      *
      */
@@ -149,10 +150,10 @@ class FlashMessages
     /**
      * Add a flash message to the session data
      *
-     * @param  string $message The message text
-     * @param  string $type The $msgType
-     * @param  string $redirectUrl Where to redirect once the message is added
-     * @param  boolean $sticky Whether or not the message is stickied
+     * @param string $message The message text
+     * @param string $type The $msgType
+     * @param string $redirectUrl Where to redirect once the message is added
+     * @param boolean $sticky Whether or not the message is stickied
      * @return object
      *
      */
@@ -203,10 +204,10 @@ class FlashMessages
     /**
      * Display the flash messages
      *
-     * @param  mixed $types (null)  print all of the message types
+     * @param mixed $types (null)  print all of the message types
      *                          (array)  print the given message types
      *                          (string)   print a single message type
-     * @param  boolean $print Whether to print the data or return it
+     * @param boolean $print Whether to print the data or return it
      * @return string
      *
      */
@@ -224,7 +225,7 @@ class FlashMessages
             // Print multiple message types (as defined by an array)
         } elseif (is_array($types) && !empty($types)) {
             $theTypes = $types;
-            $types    = [];
+            $types = [];
             foreach ($theTypes as $type) {
                 $types[] = strtolower($type[0]);
             }
@@ -267,7 +268,7 @@ class FlashMessages
     /**
      * See if there are any queued message
      *
-     * @param  string $type The $msgType
+     * @param string $type The $msgType
      * @return boolean
      *
      */
@@ -287,16 +288,16 @@ class FlashMessages
     /**
      * Format a message
      *
-     * @param  array $msgDataArray Array of message data
-     * @param  string $type The $msgType
+     * @param array $msgDataArray Array of message data
+     * @param string $type The $msgType
      * @return string                 The formatted message
      *
      */
     protected function formatMessage($msgDataArray, $type)
     {
 
-        $msgType   = isset($this->msgTypes[$type]) ? $type : $this->defaultType;
-        $cssClass  = $this->msgCssClass . ' ' . $this->cssClassMap[$type];
+        $msgType = isset($this->msgTypes[$type]) ? $type : $this->defaultType;
+        $cssClass = $this->msgCssClass . ' ' . $this->cssClassMap[$type];
         $msgBefore = $this->msgBefore;
 
         // If sticky then append the sticky CSS class
@@ -337,7 +338,7 @@ class FlashMessages
     /**
      * Clear the messages from the session data
      *
-     * @param  mixed $types (array) Clear all of the message types in array
+     * @param mixed $types (array) Clear all of the message types in array
      *                        (string)  Only clear the one given message type
      * @return object
      *

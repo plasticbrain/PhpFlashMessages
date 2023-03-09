@@ -24,7 +24,7 @@ composer require Edydeyemi/php-flash-messages
 ````
 
 ### Without composer
-Download [FlashMessages.php](https://raw.githubusercontent.com/edydeyemi/PhpFlashMessages/master/src/FlashMessages.php) and save it to your project directory.
+Download [FlashMessages.php](https://raw.githubusercontent.com/edydeyemi/FlashMessages/master/src/FlashMessages.php) and save it to your project directory.
 
 Import the file:
 

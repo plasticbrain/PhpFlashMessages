@@ -1,6 +1,6 @@
 {
-    "name": "edydeyemi/php-flash-messages",
-    "description": "A fork of Plasticbrain's session-based FlashMessages Library with support for Boostrap4 and Boostrap 5",
+    "name": "edydeyemi/flash-messages",
+    "description": "A fork of Plasticbrain's session-based FlashMessages Library with support for Boostrap 4 and Boostrap 5",
     "keywords": ["flash", "messages", "session", "bootstrap5", "bootstrap4"],
     "authors": [
         {

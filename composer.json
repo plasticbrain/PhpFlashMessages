@@ -1,11 +1,11 @@
 {
-    "name": "plasticbrain/php-flash-messages",
-    "description": "A modern take on PHP session-based flash messages",
-    "keywords": ["flash", "messages", "session", "bootstrap"],
+    "name": "edydeyemi/php-flash-messages",
+    "description": "A fork of Plasticbrain's session-based FlashMessages Library with support for Boostrat4 and Boostrap 5",
+    "keywords": ["flash", "messages", "session", "bootstrap5", "bootstrap4"],
     "authors": [
         {
-            "name": "Mike Everhart",
-            "email": "mike@plasticbrain.net"
+            "name": "Edward Babatunde",
+            "email": "edydeyemi@hotmail.com"
         }
     ],
     "license": "MIT",
@@ -15,7 +15,7 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "Plasticbrain\\FlashMessages\\": "src/"
+            "Edydeyemi\\FlashMessages\\": "src/"
         }
     }
 }

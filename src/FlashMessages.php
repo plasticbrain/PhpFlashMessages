@@ -1,9 +1,14 @@
 <?php
 
-namespace Plasticbrain\FlashMessages;
+namespace Edydeyemi\FlashMessages;
 
 class FlashMessages
 {
+
+    //Default Bootstrap Version
+    //
+    // Note: The library defaults to Bootstrap V5 theme. Pass 4 into the constructor to switch to Bootstrap V4 theme.
+    // $msg = new \Edydeyemi\FlashMessages\FlashMessages(4)
 
     // Message types and shortcuts
     const INFO    = 'i';
@@ -39,16 +44,12 @@ class FlashMessages
     protected $msgAfter  = '';
 
     // HTML for the close button
-    protected $closeBtn  = '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
-    // protected $closeBtn  = '<button type="button" class="close" 
-    //                             data-dismiss="alert" 
-    //                             aria-label="Close">
-    //                             <span aria-hidden="true">&times;</span>
-    //                         </button>';
+    protected $closeBtn;
+
 
     // CSS Classes
     protected $stickyCssClass = 'sticky';
-    protected $msgCssClass = 'alert alert-dismissible ';
+    protected $msgCssClass;
     // protected $msgCssClass = 'alert alert-dismissable';
     protected $cssClassMap = [
         self::INFO    => 'alert-info',
@@ -70,7 +71,7 @@ class FlashMessages
      * __construct
      *
      */
-    public function __construct()
+    public function __construct(int $bootstrap_version = 5)
     {
 
         // Generate a unique ID for this user and session
@@ -78,8 +79,21 @@ class FlashMessages
 
         // Create session array to hold our messages if it doesn't already exist
         if (!array_key_exists('flash_messages', $_SESSION)) $_SESSION['flash_messages'] = [];
+
+        // Activate Bootstrap Theme version. Default is version 5
+        $bootstrap_version == 5 ? $this->setBS5() : $this->setBS4();
     }
 
+    private function setBS5()
+    {
+        $this->closeBtn  = '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+        $this->msgCssClass = 'alert alert-dismissible ';
+    }
+    private function setBS4()
+    {
+        $this->closeBtn  = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>    </button>';
+        $this->msgCssClass = 'alert dismissable';
+    }
     /**
      * Add an info message
      * 
@@ -283,8 +297,8 @@ class FlashMessages
 
             // If it's not sticky then add the close button
         } else {
-            $msgBefore = $msgBefore;
-            // $msgBefore = $this->closeBtn . $msgBefore;
+            // $msgBefore = $msgBefore;
+            $msgBefore = $this->closeBtn . $msgBefore;
         }
 
         // Wrap the message if necessary

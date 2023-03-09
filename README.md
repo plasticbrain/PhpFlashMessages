@@ -1,41 +1,30 @@
 # PHP Session-Based Flash Messages
 
-Store messages in session data until they are retrieved.  Featuring PSR-4 compliance, Bootstrap compatibility, sticky messages, and more. 
-
-More info at http://mikeeverhart.net/php-flash-messages.
+Store messages in session data until they are retrieved.  Supports Bootstrap 4 or Bootstrap 5. 
 
 ## Notice
 
-This is a new version of https://github.com/plasticbrain/php-flash-messages-legacy. This updated version has been completely rewritten, and therefore **is not compatible with the original version**!
-
-Thank you to everyone that used the old version, and especially to those that left feedback and recommendations!
+This is a forked version of new version of PlasticBrain's PHPFlashMessages - https://github.com/plasticbrain/PhpFlashMessages. This forked version has support for both Bootstrap V4 and Bootstrap V5
 
 ## Features
 
 * Namespaced
 * PSR-4 autoload compliant
 * Installable with composer
-* Works with Bootstrap
+* Works with Bootstrap4 or Bootstrap 5
 * Fully customizable messages
-* Sticky messages
-
-
-
-## Roadmap
-
-* Add custom message types
-* Persistent messages (show message until it is manually cleared)
+* URL redirects
 
 ## Installation
 
 ### With Composer
 
 ````shell
-composer require plasticbrain/php-flash-messages
+composer require Edydeyemi/php-flash-messages
 ````
 
 ### Without composer
-Download [FlashMessages.php](https://raw.githubusercontent.com/plasticbrain/PhpFlashMessages/master/src/FlashMessages.php) and save it to your project directory.
+Download [FlashMessages.php](https://raw.githubusercontent.com/edydeyemi/PhpFlashMessages/master/src/FlashMessages.php) and save it to your project directory.
 
 Import the file:
 
@@ -45,13 +34,18 @@ require '/path/to/FlashMessages.php';
 
 ## Basic Usage
 
+Default theme is Bootstrap V5. Pass 4 into the contructor to switch to Bootstrap V4.
+
+
 ````php
 
 // Start a Session
 if (!session_id()) @session_start();
 	
 // Instantiate the class
-$msg = new \Plasticbrain\FlashMessages\FlashMessages();
+$msg = new \Edydeyemi\FlashMessages\FlashMessages(); 
+    or  
+$msg = new \Edydeyemi\FlashMessages\FlashMessages(4); 
 
 // Add messages
 $msg->info('This is an info message');
@@ -70,33 +64,6 @@ if ($msg->hasErrors()) {
 // Wherever you want to display the messages simply call:
 $msg->display();
 ````
-
-### Message Types
-
-#### Info
-````php
-$msg->info('This is a info message');
-````
-![Info Message](http://mikeeverhart.net/php-flash-messages/assets/img/info.png)
-
-#### Success
-````php
-$msg->success('This is a success message');
-````
-![Success Message](http://mikeeverhart.net/php-flash-messages/assets/img/success.png)
-
-
-#### Warning
-````php
-$msg->warning('This is a warning message');
-````
-![Warning Message](http://mikeeverhart.net/php-flash-messages/assets/img/warning.png)
-
-#### Error
-````php
-$msg->error('This is a error message');
-````
-![Error Message](http://mikeeverhart.net/php-flash-messages/assets/img/error.png)
 
 #### Message Type Constants
 Each message type can be referred to by its constant: INFO, SUCCESS, WARNING, ERROR. For example:
@@ -124,35 +91,6 @@ $msg->success('This is a success message');
 $msg->success('This is another success message');
 $msg->error('This is an error message', 'http://redirect-url.com');   
 `````
-
-### Sticky Messages
-By default, all messages include a close button. The close button can be removed, thus making the message sticky. To make a message sticky pass `true` as the third parameter:
-
-````php
-$msg->error("This is a sticky error message (it can't be closed)", null, true);
-$msg->warning("This is a sticky warning message (it can't be closed)", null, true);
-$msg->success("This is a sticky success message (it can't be closed)", null, true);
-$msg->info("This is a sticky info message (it can't be closed)", null, true);
-````
-
-![Sticky Info Message](http://mikeeverhart.net/php-flash-messages/assets/img/sticky-info.png)
-![Sticky Success Message](http://mikeeverhart.net/php-flash-messages/assets/img/sticky-success.png)
-![Sticky Warning Message](http://mikeeverhart.net/php-flash-messages/assets/img/sticky-warning.png)
-![Sticky Error Message](http://mikeeverhart.net/php-flash-messages/assets/img/sticky-error.png)
-
-There's also a special method, appropriately enough called `sticky()`, that can be used to make sticky messages:
-
-````php
-$msg->sticky('This is also a sticky message');
-````
-
-`sticky()` accepts an optional 2nd parameter for the redirect url, and a 3rd for the message type:
-
-````php
-$msg->sticky('This is "success" sticky message', 'http://redirect-url.com', $msg::SUCCESS);
-```
-
-By default, `sticky()` will render as whatever the default message type is set to (usually `$msg::INFO`.) Use the 3rd parameter override this.
 
 ## Helper Methods
 ### `hasErrors()`
@@ -257,14 +195,6 @@ Sets the HTML that wraps each message. HTML should include two placeholders (`%s
 
 ````php
 $msg->setMsgWrapper("<div class='%s'>%s</div>")
-````
-
-### `setStickyCssClass ( [string $cssClass] )`
-
-Set the CSS class used for sticky messages
-
-````php
-$msg->setStickyCssClass('sticky')
 ````
 
 

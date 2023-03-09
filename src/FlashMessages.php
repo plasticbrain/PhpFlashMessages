@@ -297,7 +297,6 @@ class FlashMessages
 
             // If it's not sticky then add the close button
         } else {
-            // $msgBefore = $msgBefore;
             $msgBefore = $this->closeBtn . $msgBefore;
         }
 

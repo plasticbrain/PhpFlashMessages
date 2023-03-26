@@ -1,14 +1,21 @@
 <?php
-namespace Plasticbrain\FlashMessages;
 
-class FlashMessages {
+namespace Edydeyemi\FlashMessages;
+
+class FlashMessages
+{
+
+    //Default Bootstrap Version
+    //
+    // Note: The library defaults to Bootstrap V5 theme. Pass 4 into the constructor to switch to Bootstrap V4 theme.
+    // $msg = new \Edydeyemi\FlashMessages\FlashMessages(4)
 
     // Message types and shortcuts
     const INFO    = 'i';
     const SUCCESS = 's';
     const WARNING = 'w';
     const ERROR   = 'e';
-    
+
     // Default message type
     const defaultType = self::INFO;
 
@@ -24,29 +31,27 @@ class FlashMessages {
     // 
     protected $msgTypes = [
         self::ERROR   => 'error',
-        self::WARNING => 'warning', 
-        self::SUCCESS => 'success', 
-        self::INFO    => 'info', 
+        self::WARNING => 'warning',
+        self::SUCCESS => 'success',
+        self::INFO    => 'info',
     ];
-    
+
     // Each message gets wrapped in this
-    protected $msgWrapper = "<div class='%s'>%s</div>\n"; 
-    
+    protected $msgWrapper = "<div class='%s fade show' role='alert'>%s</div>\n";
+
     // Prepend and append to each message (inside of the wrapper)
-    protected $msgBefore = '';  
-    protected $msgAfter  = ''; 
-    
+    protected $msgBefore = '';
+    protected $msgAfter  = '';
+
     // HTML for the close button
-    protected $closeBtn  = '<button type="button" class="close" 
-                                data-dismiss="alert" 
-                                aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>';
-    
+    protected $closeBtn;
+
+
     // CSS Classes
     protected $stickyCssClass = 'sticky';
-    protected $msgCssClass = 'alert dismissable';
-    protected $cssClassMap = [ 
+    protected $msgCssClass;
+    // protected $msgCssClass = 'alert alert-dismissable';
+    protected $cssClassMap = [
         self::INFO    => 'alert-info',
         self::SUCCESS => 'alert-success',
         self::WARNING => 'alert-warning',
@@ -66,7 +71,7 @@ class FlashMessages {
      * __construct
      *
      */
-    public function __construct() 
+    public function __construct(int $bootstrap_version = 5)
     {
 
         // Generate a unique ID for this user and session
@@ -75,8 +80,20 @@ class FlashMessages {
         // Create session array to hold our messages if it doesn't already exist
         if (!array_key_exists('flash_messages', $_SESSION)) $_SESSION['flash_messages'] = [];
 
+        // Activate Bootstrap Theme version. Default is version 5
+        $bootstrap_version == 5 ? $this->setBS5() : $this->setBS4();
     }
 
+    private function setBS5()
+    {
+        $this->closeBtn  = '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+        $this->msgCssClass = 'alert alert-dismissible ';
+    }
+    private function setBS4()
+    {
+        $this->closeBtn  = '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>    </button>';
+        $this->msgCssClass = 'alert dismissable';
+    }
     /**
      * Add an info message
      * 
@@ -86,7 +103,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function info($message, $redirectUrl=null, $sticky=false)
+    public function info($message, $redirectUrl = null, $sticky = false)
     {
         return $this->add($message, self::INFO, $redirectUrl, $sticky);
     }
@@ -100,7 +117,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function success($message, $redirectUrl=null, $sticky=false)
+    public function success($message, $redirectUrl = null, $sticky = false)
     {
         return $this->add($message, self::SUCCESS, $redirectUrl, $sticky);
     }
@@ -114,7 +131,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function warning($message, $redirectUrl=null, $sticky=false)
+    public function warning($message, $redirectUrl = null, $sticky = false)
     {
         return $this->add($message, self::WARNING, $redirectUrl, $sticky);
     }
@@ -128,7 +145,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function error($message, $redirectUrl=null, $sticky=false)
+    public function error($message, $redirectUrl = null, $sticky = false)
     {
         return $this->add($message, self::ERROR, $redirectUrl, $sticky);
     }
@@ -142,8 +159,8 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function sticky($message=true, $redirectUrl=null, $type=self::defaultType)
-    {   
+    public function sticky($message = true, $redirectUrl = null, $type = self::defaultType)
+    {
         return $this->add($message, $type, $redirectUrl, true);
     }
 
@@ -157,22 +174,22 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function add($message, $type=self::defaultType, $redirectUrl=null, $sticky=false) 
+    public function add($message, $type = self::defaultType, $redirectUrl = null, $sticky = false)
     {
 
         // Make sure a message and valid type was passed
         if (!isset($message[0])) return false;
         if (strlen(trim($type)) > 1) $type = strtolower($type[0]);
         if (!array_key_exists($type, $this->msgTypes)) $type = $this->defaultType;
-        
+
         // Add the message to the session data
-        if (!array_key_exists( $type, $_SESSION['flash_messages'] )) $_SESSION['flash_messages'][$type] = array();
+        if (!array_key_exists($type, $_SESSION['flash_messages'])) $_SESSION['flash_messages'][$type] = array();
         $_SESSION['flash_messages'][$type][] = ['sticky' => $sticky, 'message' => $message];
 
         // Handle the redirect if needed
         if (!is_null($redirectUrl)) $this->redirectUrl = $redirectUrl;
         $this->doRedirect();
-        
+
         return $this;
     }
 
@@ -186,26 +203,26 @@ class FlashMessages {
      * @return string
      * 
      */
-    public function display($types=null, $print=true) 
+    public function display($types = null, $print = true)
     {
 
         if (!isset($_SESSION['flash_messages'])) return false;
-        
+
         $output = '';
 
         // Print all the message types
-        if (is_null($types) || !$types || (is_array($types) && empty($types)) ) {
+        if (is_null($types) || !$types || (is_array($types) && empty($types))) {
             $types = array_keys($this->msgTypes);
 
-        // Print multiple message types (as defined by an array)
+            // Print multiple message types (as defined by an array)
         } elseif (is_array($types) && !empty($types)) {
             $theTypes = $types;
             $types = [];
-            foreach($theTypes as $type) {
+            foreach ($theTypes as $type) {
                 $types[] = strtolower($type[0]);
             }
 
-        // Print only a single message type
+            // Print only a single message type
         } else {
             $types = [strtolower($types[0])];
         }
@@ -213,23 +230,23 @@ class FlashMessages {
 
         // Retrieve and format the messages, then remove them from session data
         foreach ($types as $type) {
-            if (!isset($_SESSION['flash_messages'][$type]) || empty($_SESSION['flash_messages'][$type]) ) continue;
-            foreach( $_SESSION['flash_messages'][$type] as $msgData ) {
+            if (!isset($_SESSION['flash_messages'][$type]) || empty($_SESSION['flash_messages'][$type])) continue;
+            foreach ($_SESSION['flash_messages'][$type] as $msgData) {
                 $output .= $this->formatMessage($msgData, $type);
             }
-            $this->clear($type);            
+            $this->clear($type);
         }
 
-        
+
         // Print everything to the screen (or return the data)
-        if ($print) { 
-            echo $output; 
-        } else { 
-            return $output; 
+        if ($print) {
+            echo $output;
+        } else {
+            return $output;
         }
     }
 
-        /**
+    /**
      * See if there are any queued error messages
      * 
      * @return boolean 
@@ -237,7 +254,7 @@ class FlashMessages {
      */
     public function hasErrors()
     {
-        return empty($_SESSION['flash_messages'][self::ERROR]) ? false : true;  
+        return empty($_SESSION['flash_messages'][self::ERROR]) ? false : true;
     }
 
     /**
@@ -247,12 +264,13 @@ class FlashMessages {
      * @return boolean
      * 
      */
-    public function hasMessages($type=null) {
+    public function hasMessages($type = null)
+    {
         if (!is_null($type)) {
-            if (!empty($_SESSION['flash_messages'][$type])) return $_SESSION['flash_messages'][$type]; 
+            if (!empty($_SESSION['flash_messages'][$type])) return $_SESSION['flash_messages'][$type];
         } else {
             foreach (array_keys($this->msgTypes) as $type) {
-                if (isset($_SESSION['flash_messages'][$type]) && !empty($_SESSION['flash_messages'][$type])) return $_SESSION['flash_messages'][$type]; 
+                if (isset($_SESSION['flash_messages'][$type]) && !empty($_SESSION['flash_messages'][$type])) return $_SESSION['flash_messages'][$type];
             }
         }
         return false;
@@ -268,7 +286,7 @@ class FlashMessages {
      */
     protected function formatMessage($msgDataArray, $type)
     {
-     
+
         $msgType = isset($this->msgTypes[$type]) ? $type : $this->defaultType;
         $cssClass = $this->msgCssClass . ' ' . $this->cssClassMap[$type];
         $msgBefore = $this->msgBefore;
@@ -277,17 +295,17 @@ class FlashMessages {
         if ($msgDataArray['sticky']) {
             $cssClass .= ' ' . $this->stickyCssClass;
 
-        // If it's not sticky then add the close button
+            // If it's not sticky then add the close button
         } else {
             $msgBefore = $this->closeBtn . $msgBefore;
         }
 
         // Wrap the message if necessary
-        $formattedMessage = $msgBefore . $msgDataArray['message'] . $this->msgAfter; 
+        $formattedMessage = $msgBefore . $msgDataArray['message'] . $this->msgAfter . $this->closeBtn;
 
         return sprintf(
-            $this->msgWrapper, 
-            $cssClass, 
+            $this->msgWrapper,
+            $cssClass,
             $formattedMessage
         );
     }
@@ -299,7 +317,7 @@ class FlashMessages {
      * 
      */
     protected function doRedirect()
-    {   
+    {
         if ($this->redirectUrl) {
             header('Location: ' . $this->redirectUrl);
             exit();
@@ -315,8 +333,8 @@ class FlashMessages {
      * @return object 
      * 
      */
-    protected function clear($types=[]) 
-    { 
+    protected function clear($types = [])
+    {
         if ((is_array($types) && empty($types)) || is_null($types) || !$types) {
             unset($_SESSION['flash_messages']);
         } elseif (!is_array($types)) {
@@ -330,7 +348,7 @@ class FlashMessages {
         return $this;
     }
 
-    
+
 
     /**
      * Set the HTML that each message is wrapped in
@@ -342,7 +360,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function setMsgWrapper($msgWrapper='')
+    public function setMsgWrapper($msgWrapper = '')
     {
         $this->msgWrapper = $msgWrapper;
         return $this;
@@ -355,7 +373,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function setMsgBefore($msgBefore='')
+    public function setMsgBefore($msgBefore = '')
     {
         $this->msgBefore = $msgBefore;
         return $this;
@@ -368,7 +386,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function setMsgAfter($msgAfter='')
+    public function setMsgAfter($msgAfter = '')
     {
         $this->msgAfter = $msgAfter;
         return $this;
@@ -381,7 +399,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function setCloseBtn($closeBtn='')
+    public function setCloseBtn($closeBtn = '')
     {
         $this->closeBtn = $closeBtn;
         return $this;
@@ -394,7 +412,7 @@ class FlashMessages {
      * @return object
      * 
      */
-    public function setStickyCssClass($stickyCssClass='')
+    public function setStickyCssClass($stickyCssClass = '')
     {
         $this->stickyCssClass = $stickyCssClass;
         return $this;
@@ -408,7 +426,7 @@ class FlashMessages {
      * @return object 
      * 
      */
-    public function setMsgCssClass($msgCssClass='')
+    public function setMsgCssClass($msgCssClass = '')
     {
         $this->msgCssClass = $msgCssClass;
         return $this;
@@ -424,10 +442,10 @@ class FlashMessages {
      * @return object 
      * 
      */
-    public function setCssClassMap($msgType, $cssClass=null) 
+    public function setCssClassMap($msgType, $cssClass = null)
     {
 
-        if (!is_array($msgType) ) {
+        if (!is_array($msgType)) {
             // Make sure there's a CSS class set
             if (is_null($cssClass)) return $this;
             $msgType = [$msgType => $cssClass];
@@ -439,6 +457,4 @@ class FlashMessages {
 
         return $this;
     }
-
-
 }
